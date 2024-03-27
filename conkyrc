@@ -1,0 +1,71 @@
+conky.config = {
+    alignment = 'top_left',
+    background = true,
+    border_width = 1,
+    cpu_avg_samples = 2,
+    default_color = 'white',
+    default_outline_color = 'grey',
+    default_shade_color = 'black',
+    double_buffer = true,
+    draw_borders = false,
+    draw_graph_borders = true,
+    draw_outline = false,
+    draw_shades = false,
+    use_xft = true,
+    font = 'DejaVu Sans Mono:size=12',
+    gap_x = 5,
+    gap_y = 60,
+    minimum_height = 5,
+    minimum_width = 5,
+    net_avg_samples = 2,
+    no_buffers = true,
+    out_to_console = false,
+    out_to_stderr = false,
+    extra_newline = false,
+    own_window = true,
+    own_window_class = 'Conky',
+    own_window_type = 'normal',
+    own_window_argb_visual = true,
+    own_window_argb_value = 150,
+    own_window_transparent = false,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    stippled_borders = 0,
+    update_interval = 1.0,
+    uppercase = false,
+    use_spacer = 'none',
+    show_graph_scale = false,
+    show_graph_range = false
+};
+
+conky.text = [[
+CPU
+${color grey}CPU Load:$color $cpu% ${cpubar}
+${color grey}CPU Temp:$color ${execi 10 sensors | grep 'Core 0' | awk '{print $3}'}
+${color grey}CPU Frequency:$color ${freq_g}GHz
+${color grey}CPU Usage Graph:
+${color grey}${cpugraph 30,150 000000 0000ff}
+
+Mem RAM
+${color grey}RAM Usage:$color $mem/$memmax
+${color grey}RAM Usage Graph:
+$color${memgraph 30,150 000000 ff7f00}
+
+Disk
+${color grey}Disk Activity Graph:
+$color${diskiograph 30,150 000000 ffff00}
+
+GPU
+${color grey}GPU Temp:$color +${execi 30 nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader | awk '{print $1"°C"}'}
+${color grey}GPU Mem Usage:$color ${execi 30 nvidia-smi --query-gpu=memory.used --format=csv,noheader}/${execi 30 nvidia-smi --query-gpu=memory.total --format=csv,noheader} MB
+${color grey}GPU Memory Usage Graph:
+$color${execgraph "nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | awk '{print ($1/4096)*100}'" 30,150 000000 00ff00}
+
+Network
+${color grey}Network Down:
+$color${downspeed enp4s0} ${color grey}Up:$color${upspeed enp4s0}
+${color grey}Download Graph:
+$color${downspeedgraph enp4s0 30,150 000000 ff0000}
+${color grey}Upload Graph:
+$color${upspeedgraph enp4s0 30,150 000000 00ff00}
+]];
+
